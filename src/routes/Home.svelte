@@ -1,1 +1,1 @@
-<p>Hello welcome to home!</p>
+<p class="text-red-500">Hello welcome to home!</p>
