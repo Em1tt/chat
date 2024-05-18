@@ -1,1 +1,2 @@
-<p class="text-red-500">Hello welcome to home!</p>
+<p class="text-red-500 text-center">Vitaj v chatovacej aplikácii</p>
+

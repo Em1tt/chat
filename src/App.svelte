@@ -1,25 +1,39 @@
 <script>
-  import "./app.css";
-  import { Router, Link, Route } from "svelte-routing";
-  import Home from "./routes/Home.svelte";
-  import About from "./routes/About.svelte";
-  import Chat from "./routes/Chat.svelte";
+	import "./app.css";
+	import { Router, Link, Route } from "svelte-routing";
+	import Home from "./routes/Home.svelte";
+	import About from "./routes/About.svelte";
+	import Blog from "./routes/Blog.svelte";
+	import Chat from "./routes/Chat.svelte";
 
-  export let url = "";
+	export let url = "";
 </script>
 
-
-<Router {url}>
-  <nav>
-    <Link to="/">Home</Link>
-    <Link to="/about">About</Link>
-    <Link to="/blog">Blog</Link>
-    <Link to="/chat">Chat</Link>
-  </nav>
-  <div>
-    <Route path="/about" component={About} />
-    <Route path="/"><Home /></Route>
-    <Route path="/chat" component={Chat} />
-  </div>
-  <p>McDonalds</p>
-</Router>
+<div class="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
+	<div class="w-full max-w-md">
+		<Router {url}>
+			<nav class="bg-gray-800 text-white p-4 shadow-md rounded-md mb-3">
+				<ul class="flex space-x-4 justify-center">
+					<li>
+						<Link to="/" class="hover:text-gray-400">Home</Link>
+					</li>
+					<li>
+						<Link to="/about" class="hover:text-gray-400">About</Link>
+					</li>
+					<li>
+						<Link to="/blog" class="hover:text-gray-400">Blog</Link>
+					</li>
+					<li>
+						<Link to="/chat" class="hover:text-gray-400">Chat</Link>
+					</li>
+				</ul>
+			</nav>
+			<div class="bg-gray-800 p-6 rounded-md shadow-md">
+				<Route path="/about" component={About} />
+				<Route path="/blog" component={Blog} />
+				<Route path="/"><Home /></Route>
+				<Route path="/chat" component={Chat} />
+			</div>
+		</Router>
+	</div>
+</div>
