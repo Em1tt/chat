@@ -19,4 +19,5 @@
 	  <Route path="/"><Home /></Route>
 	  <Route path="/chat" component={Chat}/>
 	</div>
+	<p>McDonalds</p>
   </Router>
