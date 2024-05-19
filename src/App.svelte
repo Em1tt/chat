@@ -6,6 +6,7 @@
   import Blog from "./routes/Blog.svelte";
   import Chat from "./routes/Chat.svelte";
   import Login from "$lib/Login.svelte";
+  import Register from "$lib/Register.svelte";
   import { currentUser } from "$lib/pocketbase";
 
   export let url = "";
@@ -33,6 +34,7 @@
       </li>
       <li>
         <Login />
+        <Register />
       </li>
     </ul>
   </nav>
