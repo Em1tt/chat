@@ -5,64 +5,11 @@
   import About from "./routes/About.svelte";
   import Blog from "./routes/Blog.svelte";
   import Chat from "./routes/Chat.svelte";
-
-  import { pb } from "$lib/pocketbase";
-
-  import { onMount } from "svelte";
-
-  export let isDesktop = !window.matchMedia(
-    "only screen and (max-width: 768px)"
-  ).matches;
-
-  onMount(() => {
-    window.onresize = () => {
-      isDesktop = !window.matchMedia("only screen and (max-width: 768px)")
-        .matches;
-    };
-  });
+  import Login from "$lib/Login.svelte";
+  import { currentUser } from "$lib/pocketbase";
 
   export let url = "";
 
-  import * as Form from "$lib/components/ui/form";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import * as Sheet from "$lib/components/ui/sheet";
-  import * as Drawer from "$lib/components/ui/drawer";
-  let form;
-
-  let username: string;
-  let password: string;
-
-  async function login() {
-    loginIsOpen = false;
-    const user = await pb
-      .collection("users")
-      .authWithPassword(username, password);
-    console.log(user);
-  }
-
-  async function signUp() {
-    try {
-      const data = {
-        username,
-        password,
-        passwordConfirm: password,
-        name: "hi mom!",
-      };
-      const createdUser = await pb.collection("users").create(data);
-      await login();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  function signOut() {
-    pb.authStore.clear();
-  }
-
-  let loginIsOpen = false;
-
-  const classList = "invalid";
 </script>
 
 <!--
@@ -84,61 +31,9 @@
       <li>
         <Link to="/chat" class="hover:text-gray-400">Chat</Link>
       </li>
-      {#if isDesktop}
-        <Sheet.Root bind:open={loginIsOpen}>
-          <Sheet.Trigger>Open</Sheet.Trigger>
-          <Sheet.Content>
-            <Sheet.Header>
-              <Sheet.Title>Login</Sheet.Title>
-              <Sheet.Description>
-                <form on:submit|preventDefault>
-                  <div class="flex w-full max-w-sm flex-col gap-1.5">
-                    <Label for="email">Email</Label>
-                    <Input
-                      bind:value={username}
-                      type="email"
-                      id="email"
-                      placeholder="Email"
-                    />
-                    <p class="text-xs text-red-500">
-                      Enter your email address.
-                    </p>
-                  </div>
-                  <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2">
-                    <Label for="password">Heslo</Label>
-                    <Input
-                      bind:value={password}
-                      type="password"
-                      id="password"
-                      placeholder="Heslo"
-                    />
-                    <p class="text-xs text-red-500">Musíte zadať heslo.</p>
-                  </div>
-                  <div class="flex w-full max-w-sm flex-row gap-1.5 mt-2">
-                    <Form.Button on:click={signUp}>Sign Up</Form.Button>
-                    <Form.Button on:click={login}>Login</Form.Button>
-                  </div>
-                </form>
-              </Sheet.Description>
-            </Sheet.Header>
-          </Sheet.Content>
-        </Sheet.Root>
-      {:else}
-        <Drawer.Root>
-          <Drawer.Trigger>Open</Drawer.Trigger>
-          <Drawer.Content>
-            <Drawer.Header>
-              <Drawer.Title>Are you sure absolutely sure?</Drawer.Title>
-              <Drawer.Description
-                >This action cannot be undone.</Drawer.Description
-              >
-            </Drawer.Header>
-            <Drawer.Footer>
-              <Drawer.Close>Cancel</Drawer.Close>
-            </Drawer.Footer>
-          </Drawer.Content>
-        </Drawer.Root>
-      {/if}
+      <li>
+        <Login />
+      </li>
     </ul>
   </nav>
   <div class="rounded-md shadow-md">
@@ -147,15 +42,15 @@
     <Route path="/"><Home /></Route>
     <Route path="/chat" component={Chat} />
   </div>
+  {#if $currentUser}
+    <p class="text-center text-green-400">Logged in as {$currentUser.email}</p>
+  {/if}
+  {#if !$currentUser}
+    <p class="text-center text-red-400">Not logged in</p>
+  {/if}
 </Router>
 
 <!--
 	</div>
 </div>
 -->
-
-<style lang="postcss">
-  .invalid {
-    @apply border-red-500 border;
-  }
-</style>
