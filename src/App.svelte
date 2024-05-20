@@ -8,6 +8,7 @@
   import Login from "$lib/Login.svelte";
   import Register from "$lib/Register.svelte";
   import { currentUser } from "$lib/pocketbase";
+  import Funny from "$lib/hihi.jpg";
 
   export let url = "";
 
@@ -51,6 +52,10 @@
     <p class="text-center text-red-400">Not logged in</p>
   {/if}
 </Router>
+
+<div class="flex w-full justify-center">
+  <img src={Funny} alt="Vtipek" />
+</div>
 
 <!--
 	</div>
