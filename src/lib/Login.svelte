@@ -9,13 +9,11 @@
   let usernameError: string;
   let passwordError: string;
 
-  let isDesktop = !window.matchMedia("only screen and (max-width: 768px)")
-    .matches;
+  let isDesktop = !window.matchMedia("only screen and (max-width: 768px)").matches;
 
   onMount(() => {
     window.onresize = () => {
-      isDesktop = !window.matchMedia("only screen and (max-width: 768px)")
-        .matches;
+      isDesktop = !window.matchMedia("only screen and (max-width: 768px)").matches;
     };
   });
 
