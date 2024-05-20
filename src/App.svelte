@@ -8,7 +8,7 @@
   import Login from "$lib/Login.svelte";
   import Register from "$lib/Register.svelte";
   import { currentUser } from "$lib/pocketbase";
-  import Funny from "$lib/hihi.jpg";
+  import Funny from "$assets/hihi.jpg";
 
   export let url = "";
 

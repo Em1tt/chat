@@ -3,10 +3,12 @@
   import { onMount } from "svelte";
   import { isLoginOpen, isRegisterOpen } from "./stores";
 
+  let username: string = "";
   let email: string = "";
   let password: string = "";
   let confirmPassword: string = "";
 
+  let usernameError: string = "";
   let emailError: string = "";
   let passwordError: string = "";
   let confirmPasswordError: string = "";
@@ -27,6 +29,7 @@
   import { Button } from "$lib/components/ui/button/index.js";
 
   async function register() {
+    usernameError = "";
     emailError = "";
     passwordError = "";
     confirmPasswordError = "";
@@ -38,8 +41,9 @@
 
     try {
       const user = await pb.collection("users").create({
-        email: email,
-        password: password,
+        username,
+        email,
+        password,
         passwordConfirm: confirmPassword
       });
       console.log(user);
@@ -47,6 +51,9 @@
       isLoginOpen.set(true);
     } catch (e: any) {
       const errors = e.data.data;
+      if (errors.username) {
+        usernameError = errors.username.message;
+      }
       if (errors.email) {
         emailError = errors.email.message;
       }
@@ -72,6 +79,20 @@
         <Sheet.Description>
           <form on:submit|preventDefault>
             <div class="flex w-full max-w-sm flex-col gap-1.5">
+              <Label for="username">Username</Label>
+              <Input
+                class={usernameError ? "border-red-500" : ""}
+                bind:value={username}
+                on:input={() => (usernameError = "")}
+                type="text"
+                id="username"
+                placeholder="Username"
+              />
+              {#if emailError}
+                <p class="text-xs text-red-500">{emailError}</p>
+              {/if}
+            </div>
+            <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2">
               <Label for="email">Email</Label>
               <Input
                 class={emailError ? "border-red-500" : ""}
@@ -118,6 +139,9 @@
               <Button on:click={switchToLogin} variant="link" class="px-1">Login</Button>
             </div>
             <div class="flex w-full max-w-sm flex-row gap-1.5 mt-2">
+              <p class="text-sm">By registering you agree to our Terms of Service.</p>
+            </div>
+            <div class="flex w-full max-w-sm flex-row gap-1.5 mt-2">
               <Form.Button on:click={register}>Register</Form.Button>
             </div>
           </form>
@@ -132,6 +156,20 @@
         <Drawer.Title class="text-center">Register</Drawer.Title>
         <Drawer.Description class="mt-6">
           <form on:submit|preventDefault>
+            <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2">
+              <Label for="username" class="text-left">Username</Label>
+              <Input
+                class={usernameError ? "border-red-500" : ""}
+                bind:value={username}
+                on:input={() => (usernameError = "")}
+                type="text"
+                id="username"
+                placeholder="Username"
+              />
+              {#if emailError}
+                <p class="text-xs text-red-500">{emailError}</p>
+              {/if}
+            </div>
             <div class="flex w-full max-w-sm flex-col gap-1.5 mx-auto mt-2">
               <Label for="email" class="text-left">Email</Label>
               <Input
@@ -178,8 +216,9 @@
               <p>Already have an account?</p>
               <Button on:click={switchToLogin} variant="link" class="px-1">Login</Button>
             </div>
-            <div class="flex w-full max-w-sm flex-row gap-1.5 mt-2 mx-auto">
+            <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2 mx-auto">
               <Form.Button class="w-full" on:click={register}>Register</Form.Button>
+              <p class="text-sm">By registering you agree to our Terms of Service.</p>
             </div>
           </form>
         </Drawer.Description>

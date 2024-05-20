@@ -9,11 +9,13 @@
   let usernameError: string;
   let passwordError: string;
 
-  let isDesktop = !window.matchMedia("only screen and (max-width: 768px)").matches;
+  let isDesktop = !window.matchMedia("only screen and (max-width: 768px)")
+    .matches;
 
   onMount(() => {
     window.onresize = () => {
-      isDesktop = !window.matchMedia("only screen and (max-width: 768px)").matches;
+      isDesktop = !window.matchMedia("only screen and (max-width: 768px)")
+        .matches;
     };
   });
 
@@ -32,18 +34,18 @@
       console.log(user);
       isLoginOpen.set(false);
     } catch (e: any) {
-        if(e.data.message == "Failed to authenticate."){
-            usernameError = "Email or password incorrect";
-        }else{
-            Object.keys(e.data.data).forEach((key) => {
-        if (key === "identity") {
-          usernameError = e.data.data[key].message;
-        }
-        if (key === "password") {
-          passwordError = e.data.data[key].message;
-        }
-      });
-        }
+      if (e.data.message == "Failed to authenticate.") {
+        usernameError = "Email or password incorrect";
+      } else {
+        Object.keys(e.data.data).forEach((key) => {
+          if (key === "identity") {
+            usernameError = e.data.data[key].message;
+          }
+          if (key === "password") {
+            passwordError = e.data.data[key].message;
+          }
+        });
+      }
     }
   }
 
@@ -64,14 +66,14 @@
         <Sheet.Description>
           <form on:submit|preventDefault>
             <div class="flex w-full max-w-sm flex-col gap-1.5">
-              <Label for="email">Email</Label>
+              <Label for="email">Email/Username</Label>
               <Input
                 class={usernameError ? "border-red-500" : ""}
                 bind:value={username}
                 on:input={() => (usernameError = "")}
                 type="email"
                 id="email"
-                placeholder="Email"
+                placeholder="Email/Username"
               />
               {#if usernameError}
                 <p class="text-xs text-red-500">{usernameError}</p>
@@ -112,45 +114,45 @@
       <Drawer.Header>
         <Drawer.Title class="text-center">Login</Drawer.Title>
         <Drawer.Description class="mt-6">
-            <form on:submit|preventDefault>
-                <div class="flex w-full max-w-sm flex-col gap-1.5 mx-auto mt-2">
-                  <Label for="email" class="text-left">Email</Label>
-                  <Input
-                    class={usernameError ? "border-red-500" : ""}
-                    bind:value={username}
-                    on:input={() => (usernameError = "")}
-                    type="email"
-                    id="email"
-                    placeholder="Email"
-                  />
-                  {#if usernameError}
-                    <p class="text-xs text-red-500 text-left">{usernameError}</p>
-                  {/if}
-                </div>
-                <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2 mx-auto">
-                  <Label for="password" class="text-left">Password</Label>
-                  <Input
-                    class={passwordError ? "border-red-500" : ""}
-                    bind:value={password}
-                    on:input={() => (passwordError = "")}
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                  />
-                  {#if passwordError}
-                    <p class="text-xs text-red-500 text-left">{passwordError}</p>
-                  {/if}
-                </div>
-                <div class="flex flex-row w-full max-w-sm items-center mx-auto">
-                  <p>No account?</p>
-                  <Button on:click={switchToRegister} variant="link" class="px-1"
-                    >Register</Button
-                  >
-                </div>
-                <div class="flex w-full max-w-sm flex-row gap-1.5 mt-2 mx-auto">
-                  <Form.Button class="w-full" on:click={login}>Login</Form.Button>
-                </div>
-              </form>
+          <form on:submit|preventDefault>
+            <div class="flex w-full max-w-sm flex-col gap-1.5 mx-auto mt-2">
+              <Label for="email" class="text-left">Email</Label>
+              <Input
+                class={usernameError ? "border-red-500" : ""}
+                bind:value={username}
+                on:input={() => (usernameError = "")}
+                type="email"
+                id="email"
+                placeholder="Email"
+              />
+              {#if usernameError}
+                <p class="text-xs text-red-500 text-left">{usernameError}</p>
+              {/if}
+            </div>
+            <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2 mx-auto">
+              <Label for="password" class="text-left">Password</Label>
+              <Input
+                class={passwordError ? "border-red-500" : ""}
+                bind:value={password}
+                on:input={() => (passwordError = "")}
+                type="password"
+                id="password"
+                placeholder="Password"
+              />
+              {#if passwordError}
+                <p class="text-xs text-red-500 text-left">{passwordError}</p>
+              {/if}
+            </div>
+            <div class="flex flex-row w-full max-w-sm items-center mx-auto">
+              <p>No account?</p>
+              <Button on:click={switchToRegister} variant="link" class="px-1"
+                >Register</Button
+              >
+            </div>
+            <div class="flex w-full max-w-sm flex-row gap-1.5 mt-2 mx-auto">
+              <Form.Button class="w-full" on:click={login}>Login</Form.Button>
+            </div>
+          </form>
         </Drawer.Description>
       </Drawer.Header>
     </Drawer.Content>
