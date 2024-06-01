@@ -8,16 +8,12 @@
   import Login from "$lib/Login.svelte";
   import Register from "$lib/Register.svelte";
   import { currentUser } from "$lib/pocketbase";
-  import Funny from "$assets/hihi.jpg";
+  import Funny from "$public/hihi.jpg";
+  import Funny02 from "$public/hihi02.jpg";
 
   export let url = "";
-
 </script>
 
-<!--
-<div class="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
-	<div class="w-full max-w-md">
-		-->
 <Router {url}>
   <nav class="text-sky-400 p-4 shadow-md rounded-md mb-3">
     <ul class="flex space-x-4 justify-center">
@@ -53,11 +49,7 @@
   {/if}
 </Router>
 
-<div class="flex w-full justify-center">
+<div class="flex flex-col w-full justify-center">
   <img src={Funny} alt="Vtipek" />
+  <img src={Funny02} alt="Vtipek" />
 </div>
-
-<!--
-	</div>
-</div>
--->

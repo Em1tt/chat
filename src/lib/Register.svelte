@@ -156,7 +156,7 @@
         <Drawer.Title class="text-center">Register</Drawer.Title>
         <Drawer.Description class="mt-6">
           <form on:submit|preventDefault>
-            <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2">
+            <div class="flex w-full max-w-sm flex-col gap-1.5 mt-2 mx-auto">
               <Label for="username" class="text-left">Username</Label>
               <Input
                 class={usernameError ? "border-red-500" : ""}

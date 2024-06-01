@@ -8,8 +8,8 @@
     "paths": {
       "$lib": ["./src/lib"],
       "$lib/*": ["./src/lib/*"],
-      "$assets": ["./src/assets"],
-      "$assets/*": ["./src/assets"]
+      "$public": ["./public"],
+      "$public/*": ["./public"]
     },
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.

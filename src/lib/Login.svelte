@@ -71,7 +71,7 @@
                 class={usernameError ? "border-red-500" : ""}
                 bind:value={username}
                 on:input={() => (usernameError = "")}
-                type="email"
+                type="text"
                 id="email"
                 placeholder="Email/Username"
               />
@@ -121,7 +121,7 @@
                 class={usernameError ? "border-red-500" : ""}
                 bind:value={username}
                 on:input={() => (usernameError = "")}
-                type="email"
+                type="text"
                 id="email"
                 placeholder="Email"
               />
