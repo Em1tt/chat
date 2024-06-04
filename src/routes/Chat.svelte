@@ -37,12 +37,14 @@
   <div class="bg-white shadow-md rounded-lg p-4 mb-4">
     <h1 class="text-2xl font-bold mb-2">Global Chat</h1>
     <div class="mb-4 h-64 overflow-y-auto">
+      {#key $messages}
       {#each $messages as message (message.id)}
         <div class="p-2 border-b border-gray-200">
           <p><strong>{message.expand?.author.username}</strong>: {message.content}</p>
           <small class="text-gray-500">{new Date(message.created).toLocaleString()}</small>
         </div>
       {/each}
+      {/key}
     </div>
     <input
       type="text"
