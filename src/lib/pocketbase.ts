@@ -18,17 +18,18 @@ pb.authStore.onChange((auth) => {
 });
 
 export const messages = writable<Message[]>([]);
-
-try {
-    console.log('Subscription triggered');
+(async () => {
+  try {
     const records = await pb.collection('messages').getFullList<Message>({ sort: '-created', expand: 'author' });
-    console.log('Fetched messages:', records);
     messages.set(records);
   } catch (error) {
     console.error('Failed to fetch messages:', error);
   }
+})();
 
-pb.collection('messages').subscribe('*', async () => {
+pb.collection('messages').subscribe('*', async (e) => {
+  console.log(e.action);
+  
   try {
     console.log('Subscription triggered');
     const records = await pb.collection('messages').getFullList<Message>({ sort: '-created', expand: 'author' });
