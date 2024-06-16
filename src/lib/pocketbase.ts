@@ -2,7 +2,7 @@ import PocketBase, { type AuthModel } from 'pocketbase';
 import type { RecordModel } from 'pocketbase';
 import { get, writable, type Writable } from 'svelte/store';
 
-export const currentChat: Writable<RecordModel> = writable();
+export const currentChat: Writable<RecordModel | null> = writable(null);
 
 interface Message extends RecordModel {
   content: string;
@@ -25,30 +25,31 @@ pb.authStore.onChange((auth) => {
 });
 
 export const messages = writable<Message[]>([]);
+export const globalMessages = writable<Message[]>([]);
+
 (async () => {
   try {
     const records = await pb.collection('messages').getFullList<Message>({ sort: '-created', expand: 'author' });
-    messages.set(records);
+    globalMessages.set(records);
   } catch (error) {
     console.error('Failed to fetch messages:', error);
   }
 })();
 
 pb.collection('messages').subscribe('*', async (e) => {
-
-  if(!currentChat){
+  if (!get(currentChat)) {
     try {
       console.log('Subscription triggered');
       const records = await pb.collection('messages').getFullList<Message>({ sort: '-created', expand: 'author' });
       console.log('Fetched messages:', records);
-      messages.set(records);
+      globalMessages.set(records);
     } catch (error) {
       console.error('Failed to fetch messages:', error);
     }
-  }else{
+  } else {
     try {
       console.log('Subscription triggered');
-      const records = await pb.collection('messages').getFullList<Message>({ sort: '-created', expand: 'author', filter: `group=${get(currentChat).id}` });
+      const records = await pb.collection('messages').getFullList<Message>({ sort: '-created', expand: 'author', filter: `group=${get(currentChat)?.id}` });
       console.log('Fetched messages:', records);
       messages.set(records);
     } catch (error) {
@@ -71,14 +72,27 @@ export const addMessage = async (content: string) => {
   }
 };
 
-export const users: Writable<User[]> = writable();
+export const addGroupMessage = async (content: string, groupId: string) => {
+  try {
+    const user = pb.authStore.model;
+    if (!user) throw new Error('User not authenticated');
+    const author = user.id ;
+    console.log('Sending group message:', content);
+    const response = await pb.collection('messages').create({ content, author, group: groupId });
+    console.log('Group message sent:', response);
+  } catch (error) {
+    console.error('Failed to add group message:', error);
+    throw error;
+  }
+};
 
+export const users: Writable<User[]> = writable();
 
 (async () => {
   try {
     const records = await pb.collection('users').getFullList<User>({ sort: '-created', expand: 'author' });
     users.set(records);
   } catch (error) {
-    console.error('Failed to fetch messages:', error);
+    console.error('Failed to fetch users:', error);
   }
 })();
