@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import { currentChat, currentUser, messages, pb, addGroupMessage } from "./pocketbase";
+  import { currentChat, messages, pb, addGroupMessage } from "./pocketbase";
   import type { RecordModel } from "pocketbase";
 
   let messagesSubDestroy: () => void;

@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { globalMessages, addMessage, users, currentChat } from '$lib/pocketbase';
+  import { globalMessages, addMessage, users, currentChat, currentUser } from '$lib/pocketbase';
   import { writable } from 'svelte/store';
   import Users from '$lib/Users.svelte';
   import ChatWindow from '$lib/ChatWindow.svelte';
@@ -31,8 +31,9 @@
     currentChat.set(null);
   };
 </script>
-
+{#if $currentUser}
 <Users/>
+{/if}
 
 {#if $currentChat}
   <ChatWindow/>

@@ -13,9 +13,10 @@
     if (existingGroups.length > 0) {
       return existingGroups[0];
     } else {
-      const newGroup = await pb.collection("group").create({
-        users: [userId, currentUserId]
+      let newGroup = await pb.collection("group").create({
+        users: [userId, currentUserId],
       });
+      newGroup = await pb.collection("group").getOne(newGroup.id, { expand: "users" });
       return newGroup;
     }
   } catch (error) {
